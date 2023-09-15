@@ -1,0 +1,26 @@
+go  -- web开发    --http协议
+       微服务开发  --rpc(远程过程调用)  go-micro
+       微服务开发是什么：
+                    业务的解耦
+
+go是用 net/http 启动服务
+go 做 web开发对框架的依赖性，没有python高
+go --net/http  --web客户端，web服务端
+
+net/http  ---gin  --路由管理
+
+gin框架：
+    快速，路由不使用反射，占用内存少
+    中间件：在http请求之前，做一些工作
+    异常处理
+    对json处理
+    路由分组 --restful
+
+go get github.com/gin-gonic/gin --下载gin框架
+
+go.mod  依赖关系与依赖版本
+go.sum  校验
+$GOPATH/PKG/MOD  第三方软件包位置
+
+//Running in "debug" mode. Switch to "release" mode in production.
+// 在 debug 模式

@@ -1,0 +1,1 @@
+import{s as t}from"./serviceAxios-fb88dc5b.js";const r=()=>t({url:"/v1/Hom4",method:"get"}),s=o=>t({url:"/v1/UserCenter3",method:"post",data:o}),m=o=>t({url:"/v1/Roi",method:"post",data:o}),n=o=>t({url:"/v1/LiComp",method:"get",data:o}),p=o=>t({url:"/v1/Roi2",method:"post",data:o});export{r as H,n as a,p as b,s as g,m as p};

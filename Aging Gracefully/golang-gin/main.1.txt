@@ -1,0 +1,91 @@
+package main
+
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"mih_pq87/config"
+)
+
+type  User struct {
+	Username string `json:"username"`
+	Passwd string 	`json:"password"`
+
+}
+
+//Running in "debug" mode. Switch to "release" mode in production.
+// 在 debug 模式
+func main()  {
+	//加载配置文件 调用config.Init 去加载配置
+	if err := config.Init("");err != nil{
+		panic(err)
+	}
+
+	//设置 gin 的运行模式
+	gin.SetMode(viper.GetString("runmode"))
+	fmt.Println(viper.GetString("runmode"))
+
+
+
+
+	fmt.Println(1123)
+	g := gin.Default()
+
+	//gin框架把请求和响应全部封装在，gin.Context 实例对象中
+	g.GET("/", func(c *gin.Context) {
+			c.String(200,"hoellow world!,get")
+	})
+	g.POST("/", func(c *gin.Context) {
+		c.String(200,"POSH")
+	})
+
+	//路由分组
+	u := g.Group("/v1")  //生成一个前缀为 /v1 的路由组
+	{
+		u.POST("/product", func(c *gin.Context) {
+			c.String(200,"this is post")
+		})
+
+		u.GET("/product", func(c *gin.Context) {
+			c.String(200,"this is GET")
+		})
+
+		//动态路由,url 传递参数。请求中的路由变量 --动态路由
+		u.GET("/product/:id", func(c *gin.Context) {
+			//通过gin.Context实例对象c 调用 .Param() 方法
+			//获得 url  传递过来的参数
+			product_id := c.Param("id")//id只是GET方法定义的变量，具体传递的数据 url 上并不需要写 id
+			fmt.Println(product_id)
+			c.String(200,product_id)
+		})
+
+		//将接口的工作都交给 modify_product 这个函数
+		u.PUT("/product/:id",modify_product)
+
+	}
+
+
+		//启动服务  go在生产环境也可以这样启动 底层是调用 net/http包
+		g.Run(":8765")
+
+}
+
+//这个函数的形参 必须要是 gin.Context
+func modify_product(c *gin.Context)  {
+	pr_id:=c.Param("id")  //.Param() 接收动态路由
+	//c.String(200,"this is modify product %s",pr_id)
+
+	name := c.Query("name") //.Query() 接收请求中 url的变量 name
+	passwd:=c.DefaultQuery("passwd","123123") //接收passwd 如果没有 就提供默认值：123123
+
+	var u User
+	//解析客户端的传入
+	c.ShouldBindJSON(&u);fmt.Println(u.Username,u.Passwd)
+//c.Bind 绑定  c.ShouldBind异常程序不会中断
+//c.ShouldBindJSON  绑定json格式
+//c.ShouldBindform  绑定表单格式
+
+	//返回给客户端的 数据
+	c.String(200,"this is modify product pr_id=%s,name = %s，passwd = %s",pr_id,name,passwd)
+
+}

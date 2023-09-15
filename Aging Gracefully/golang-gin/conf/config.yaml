@@ -1,0 +1,10 @@
+runmode: debug
+addr: :8765
+name: mjgapi
+db:
+  name: pengqing730
+  addr: 192.168.6.254:3306
+  username: sc
+  password: sc123789
+
+jwt_secret: 123456
